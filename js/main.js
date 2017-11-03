@@ -25,7 +25,7 @@ function MainFactory(){
   this.startup = function() {
     this.connectButton = document.getElementById('connectButton');
     this.disconnectButton = document.getElementById('disconnectButton');
-    this.sendButton = document.getElementById('this.sendButton');
+    this.sendButton = document.getElementById('sendButton');
     this.messageInputBox = document.getElementById('message');
     this.receiveBox = document.getElementById('receivebox');
 
