@@ -167,7 +167,10 @@
 
   var sendChannel = null;       // RTCDataChannel for the local (sender)
   var receiveChannel = null;    // RTCDataChannel for the remote (receiver)
-
+  window.localConnection = localConnection;
+  window.remoteConnection = remoteConnection;
+  window.sendChannel = sendChannel;
+  window.receiveChannel = receiveChannel;
   // Functions
 
   // Set things up, connect event listeners, etc.
