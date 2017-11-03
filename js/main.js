@@ -11,32 +11,6 @@ function startup() {
   disconnectButton.addEventListener('click', disconnectPeers, false);
   sendButton.addEventListener('click', sendMessage, false);
 }
-
-var localConnection = new RTCPeerConnection();
-
-var sendChannel = localConnection.createDataChannel("sendChannel");
-sendChannel.onopen = handleSendChannelStatusChange;
-sendChannel.onclose = handleSendChannelStatusChange;
-
-var remoteConnection = new RTCPeerConnection();
-remoteConnection.ondatachannel = receiveChannelCallback;
-
-localConnection.onicecandidate = e => !e.candidate
-  || remoteConnection.addIceCandidate(e.candidate)
-  .catch(handleAddCandidateError);
-
-remoteConnection.onicecandidate = e => !e.candidate
-  || localConnection.addIceCandidate(e.candidate)
-  .catch(handleAddCandidateError);
-
-localConnection.createOffer()
-  .then(offer => localConnection.setLocalDescription(offer))
-  .then(() => remoteConnection.setRemoteDescription(localConnection.localDescription))
-  .then(() => remoteConnection.createAnswer())
-  .then(answer => remoteConnection.setLocalDescription(answer))
-  .then(() => localConnection.setRemoteDescription(remoteConnection.localDescription))
-  .catch(handleCreateDescriptionError);
-
 function handleLocalAddCandidateSuccess() {
   connectButton.disabled = true;
 }
@@ -120,3 +94,27 @@ function disconnectPeers() {
   messageInputBox.value = "";
   messageInputBox.disabled = true;
 }
+var localConnection = new RTCPeerConnection();
+
+var sendChannel = localConnection.createDataChannel("sendChannel");
+sendChannel.onopen = handleSendChannelStatusChange;
+sendChannel.onclose = handleSendChannelStatusChange;
+
+var remoteConnection = new RTCPeerConnection();
+remoteConnection.ondatachannel = receiveChannelCallback;
+
+localConnection.onicecandidate = e => !e.candidate
+  || remoteConnection.addIceCandidate(e.candidate)
+  .catch(handleAddCandidateError);
+
+remoteConnection.onicecandidate = e => !e.candidate
+  || localConnection.addIceCandidate(e.candidate)
+  .catch(handleAddCandidateError);
+
+localConnection.createOffer()
+  .then(offer => localConnection.setLocalDescription(offer))
+  .then(() => remoteConnection.setRemoteDescription(localConnection.localDescription))
+  .then(() => remoteConnection.createAnswer())
+  .then(answer => remoteConnection.setLocalDescription(answer))
+  .then(() => localConnection.setRemoteDescription(remoteConnection.localDescription))
+  .catch(handleCreateDescriptionError);
