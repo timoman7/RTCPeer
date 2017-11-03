@@ -11,6 +11,9 @@ function startup() {
   disconnectButton.addEventListener('click', disconnectPeers, false);
   sendButton.addEventListener('click', sendMessage, false);
 }
+function handleCreateDescriptionError(e){
+  console.log(e);
+};
 function handleLocalAddCandidateSuccess() {
   connectButton.disabled = true;
 }
