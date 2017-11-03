@@ -166,4 +166,4 @@ function MainFactory(){
   };
 }
 
-window.RTCData = MainFactory();
+window.RTCData = new MainFactory();
