@@ -73,9 +73,9 @@ function MainFactory(){
 
   this.receiveChannelCallback = function(event) {
     this.receiveChannel = event.channel;
-    this.receiveChannel.onmessage = handleReceiveMessage;
-    this.receiveChannel.onopen = handleReceiveChannelStatusChange;
-    this.receiveChannel.onclose = handleReceiveChannelStatusChange;
+    this.receiveChannel.onmessage = this.handleReceiveMessage;
+    this.receiveChannel.onopen = this.handleReceiveChannelStatusChange;
+    this.receiveChannel.onclose = this.handleReceiveChannelStatusChange;
   }
 
   this.handleSendChannelStatusChange = function(event) {
