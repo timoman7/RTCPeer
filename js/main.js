@@ -162,7 +162,7 @@ function MainFactory(){
   window.addEventListener("load", startup, false);
   return {
     toReturn: this.toReturn,
-    this
+    Recursive: this
   };
 }
 
