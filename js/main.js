@@ -38,6 +38,7 @@ function MainFactory(){
     connectButton.addEventListener('click', connectPeers, false);
     disconnectButton.addEventListener('click', disconnectPeers, false);
     sendButton.addEventListener('click', sendMessage, false);
+
   }
   const ErrorHandler={
     CreateDescription: function(e){
@@ -159,6 +160,7 @@ function MainFactory(){
     messageInputBox.disabled = true;
   }
   window.addEventListener("load", startup, false);
+  return this.toReturn;
 }
 
-MainFactory();
+window.RTCData = MainFactory();
