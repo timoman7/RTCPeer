@@ -11,9 +11,15 @@ function startup() {
   disconnectButton.addEventListener('click', disconnectPeers, false);
   sendButton.addEventListener('click', sendMessage, false);
 }
-function handleCreateDescriptionError(e){
-  console.log(e);
+const ErrorHandler={
+  CreateDescription: function(e){
+    console.log(e);
+  },
+  AddCandidate: function(e){
+    console.log(e);
+  }
 };
+
 function handleLocalAddCandidateSuccess() {
   connectButton.disabled = true;
 }
@@ -108,11 +114,11 @@ remoteConnection.ondatachannel = receiveChannelCallback;
 
 localConnection.onicecandidate = e => !e.candidate
   || remoteConnection.addIceCandidate(e.candidate)
-  .catch(handleAddCandidateError);
+  .catch(ErrorHandler.AddCandidate);
 
 remoteConnection.onicecandidate = e => !e.candidate
   || localConnection.addIceCandidate(e.candidate)
-  .catch(handleAddCandidateError);
+  .catch(ErrorHandler.AddCandidate);
 
 localConnection.createOffer()
   .then(offer => localConnection.setLocalDescription(offer))
@@ -120,4 +126,4 @@ localConnection.createOffer()
   .then(() => remoteConnection.createAnswer())
   .then(answer => remoteConnection.setLocalDescription(answer))
   .then(() => localConnection.setRemoteDescription(remoteConnection.localDescription))
-  .catch(handleCreateDescriptionError);
+  .catch(ErrorHandler.CreateDescription);
