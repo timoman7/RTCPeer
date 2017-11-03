@@ -146,7 +146,8 @@ function MainFactory(){
     this.messageInputBox.value = "";
     this.messageInputBox.disabled = true;
   }
-  window.addEventListener("load", this.startup, false);
+  //window.addEventListener("load", this.startup, false);
 }
 
 window.RTCData = new MainFactory();
+window.addEventListener("load", window.RTCData.startup, false);
