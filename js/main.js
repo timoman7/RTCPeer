@@ -39,7 +39,7 @@ function MainFactory(){
   this.connectPeers = function(){
     this.localConnection = new RTCPeerConnection();
 
-    this.sendChannel = this.localConnection.createDataChannel("this.sendChannel");
+    this.sendChannel = this.localConnection.createDataChannel("sendChannel");
     this.sendChannel.onopen = this.handleSendChannelStatusChange;
     this.sendChannel.onclose = this.handleSendChannelStatusChange;
 
