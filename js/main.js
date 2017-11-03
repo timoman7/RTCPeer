@@ -1,5 +1,5 @@
 function MainFactory(){
-
+  var self = this;
   var connectButton = null;
   var disconnectButton = null;
   var sendButton = null;
@@ -162,7 +162,7 @@ function MainFactory(){
   window.addEventListener("load", startup, false);
   return {
     toReturn: this.toReturn,
-    Recursive: this
+    Recursive: self
   };
 }
 
