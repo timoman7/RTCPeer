@@ -160,7 +160,10 @@ function MainFactory(){
     messageInputBox.disabled = true;
   }
   window.addEventListener("load", startup, false);
-  return this.toReturn;
+  return {
+    toReturn: this.toReturn,
+    this
+  };
 }
 
 window.RTCData = MainFactory();
