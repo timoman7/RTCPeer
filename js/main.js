@@ -1,169 +1,152 @@
+const ErrorHandler={
+  CreateDescription: function(e){
+    console.log(e);
+  },
+  AddCandidate: function(e){
+    console.log(e);
+  }
+};
 function MainFactory(){
   var self = this;
-  var connectButton = null;
-  var disconnectButton = null;
-  var sendButton = null;
-  var messageInputBox = null;
-  var receiveBox = null;
+  this.connectButton = null;
+  this.disconnectButton = null;
+  this.sendButton = null;
+  this.messageInputBox = null;
+  this.receiveBox = null;
 
-  var localConnection = null;   // RTCPeerConnection for our "local" connection
-  var remoteConnection = null;  // RTCPeerConnection for the "remote"
+  this.localConnection = null;   // RTCPeerConnection for our "local" connection
+  this.remoteConnection = null;  // RTCPeerConnection for the "remote"
 
-  var sendChannel = null;       // RTCDataChannel for the local (sender)
-  var receiveChannel = null;    // RTCDataChannel for the remote (receiver)
-
-  this.toReturn = {
-    connectButton,
-    disconnectButton,
-    sendButton,
-    messageInputBox,
-    receiveBox,
-    localConnection,
-    remoteConnection,
-    sendChannel,
-    receiveChannel
-  };
+  this.sendChannel = null;       // RTCDataChannel for the local (sender)
+  this.receiveChannel = null;    // RTCDataChannel for the remote (receiver)
 
   //Functions
 
-  function startup() {
-    connectButton = document.getElementById('connectButton');
-    disconnectButton = document.getElementById('disconnectButton');
-    sendButton = document.getElementById('sendButton');
-    messageInputBox = document.getElementById('message');
-    receiveBox = document.getElementById('receivebox');
+  this.startup = function() {
+    this.connectButton = document.getElementById('connectButton');
+    this.disconnectButton = document.getElementById('disconnectButton');
+    this.sendButton = document.getElementById('this.sendButton');
+    this.messageInputBox = document.getElementById('message');
+    this.receiveBox = document.getElementById('receivebox');
 
     // Set event listeners for user interface widgets
 
-    connectButton.addEventListener('click', connectPeers, false);
-    disconnectButton.addEventListener('click', disconnectPeers, false);
-    sendButton.addEventListener('click', sendMessage, false);
-
+    this.connectButton.addEventListener('click', this.connectPeers, false);
+    this.disconnectButton.addEventListener('click', this.disconnectPeers, false);
+    this.sendButton.addEventListener('click', this.sendMessage, false);
   }
-  const ErrorHandler={
-    CreateDescription: function(e){
-      console.log(e);
-    },
-    AddCandidate: function(e){
-      console.log(e);
-    }
-  };
 
-  function connectPeers(){
-    localConnection = new RTCPeerConnection();
+  this.connectPeers = function(){
+    this.localConnection = new RTCPeerConnection();
 
-    sendChannel = localConnection.createDataChannel("sendChannel");
-    sendChannel.onopen = handleSendChannelStatusChange;
-    sendChannel.onclose = handleSendChannelStatusChange;
+    this.sendChannel = this.localConnection.createDataChannel("this.sendChannel");
+    this.sendChannel.onopen = this.handleSendChannelStatusChange;
+    this.sendChannel.onclose = this.handleSendChannelStatusChange;
 
-    remoteConnection = new RTCPeerConnection();
-    remoteConnection.ondatachannel = receiveChannelCallback;
+    this.remoteConnection = new RTCPeerConnection();
+    this.remoteConnection.ondatachannel = this.receiveChannelCallback;
 
-    localConnection.onicecandidate = e => !e.candidate
-      || remoteConnection.addIceCandidate(e.candidate)
+    this.localConnection.onicecandidate = e => !e.candidate
+      || this.remoteConnection.addIceCandidate(e.candidate)
       .catch(ErrorHandler.AddCandidate);
 
-    remoteConnection.onicecandidate = e => !e.candidate
-      || localConnection.addIceCandidate(e.candidate)
+    this.remoteConnection.onicecandidate = e => !e.candidate
+      || this.localConnection.addIceCandidate(e.candidate)
       .catch(ErrorHandler.AddCandidate);
 
-    localConnection.createOffer()
-      .then(offer => localConnection.setLocalDescription(offer))
-      .then(() => remoteConnection.setRemoteDescription(localConnection.localDescription))
-      .then(() => remoteConnection.createAnswer())
-      .then(answer => remoteConnection.setLocalDescription(answer))
-      .then(() => localConnection.setRemoteDescription(remoteConnection.localDescription))
+    this.localConnection.createOffer()
+      .then(offer => this.localConnection.setLocalDescription(offer))
+      .then(() => this.remoteConnection.setRemoteDescription(this.localConnection.localDescription))
+      .then(() => this.remoteConnection.createAnswer())
+      .then(answer => this.remoteConnection.setLocalDescription(answer))
+      .then(() => this.localConnection.setRemoteDescription(this.remoteConnection.localDescription))
       .catch(ErrorHandler.CreateDescription);
   }
 
-  function handleLocalAddCandidateSuccess() {
-    connectButton.disabled = true;
+  this.handleLocalAddCandidateSuccess = function() {
+    this.connectButton.disabled = true;
   }
 
-  function handleRemoteAddCandidateSuccess() {
-    disconnectButton.disabled = false;
+  this.handleRemoteAddCandidateSuccess = function() {
+    this.disconnectButton.disabled = false;
   }
 
-  function receiveChannelCallback(event) {
-    var receiveChannel = event.channel;
-    receiveChannel.onmessage = handleReceiveMessage;
-    receiveChannel.onopen = handleReceiveChannelStatusChange;
-    receiveChannel.onclose = handleReceiveChannelStatusChange;
+  this.receiveChannelCallback = function(event) {
+    this.receiveChannel = event.channel;
+    this.receiveChannel.onmessage = handleReceiveMessage;
+    this.receiveChannel.onopen = handleReceiveChannelStatusChange;
+    this.receiveChannel.onclose = handleReceiveChannelStatusChange;
   }
 
-  function handleSendChannelStatusChange(event) {
-    if (sendChannel) {
-      var state = sendChannel.readyState;
+  this.handleSendChannelStatusChange = function(event) {
+    if (this.sendChannel) {
+      var state = this.sendChannel.readyState;
 
       if (state === "open") {
-        messageInputBox.disabled = false;
-        messageInputBox.focus();
-        sendButton.disabled = false;
-        disconnectButton.disabled = false;
-        connectButton.disabled = true;
+        this.messageInputBox.disabled = false;
+        this.messageInputBox.focus();
+        this.sendButton.disabled = false;
+        this.disconnectButton.disabled = false;
+        this.connectButton.disabled = true;
       } else {
-        messageInputBox.disabled = true;
-        sendButton.disabled = true;
-        connectButton.disabled = false;
-        disconnectButton.disabled = true;
+        this.messageInputBox.disabled = true;
+        this.sendButton.disabled = true;
+        this.connectButton.disabled = false;
+        this.disconnectButton.disabled = true;
       }
     }
   }
 
-  function handleReceiveChannelStatusChange(event) {
-    if (receiveChannel) {
+  this.handleReceiveChannelStatusChange = function(event) {
+    if (this.receiveChannel) {
       console.log("Receive channel's status has changed to " +
-                  receiveChannel.readyState);
+                  this.receiveChannel.readyState);
     }
   }
 
-  function sendMessage() {
-    var message = messageInputBox.value;
-    sendChannel.send(message);
+  this.sendMessage = function() {
+    var message = this.messageInputBox.value;
+    this.sendChannel.send(message);
 
-    messageInputBox.value = "";
-    messageInputBox.focus();
+    this.messageInputBox.value = "";
+    this.messageInputBox.focus();
   }
 
-  function handleReceiveMessage(event) {
+  this.handleReceiveMessage = function(event) {
     var el = document.createElement("p");
     var txtNode = document.createTextNode(event.data);
 
     el.appendChild(txtNode);
-    receiveBox.appendChild(el);
+    this.receiveBox.appendChild(el);
   }
 
-  function disconnectPeers() {
+  this.disconnectPeers = function() {
 
     // Close the RTCDataChannels if they're open.
 
-    sendChannel.close();
-    receiveChannel.close();
+    this.sendChannel.close();
+    this.receiveChannel.close();
 
     // Close the RTCPeerConnections
 
-    localConnection.close();
-    remoteConnection.close();
+    this.localConnection.close();
+    this.remoteConnection.close();
 
-    sendChannel = null;
-    receiveChannel = null;
-    localConnection = null;
-    remoteConnection = null;
+    this.sendChannel = null;
+    this.receiveChannel = null;
+    this.localConnection = null;
+    this.remoteConnection = null;
 
     // Update user interface elements
 
-    connectButton.disabled = false;
-    disconnectButton.disabled = true;
-    sendButton.disabled = true;
+    this.connectButton.disabled = false;
+    this.disconnectButton.disabled = true;
+    this.sendButton.disabled = true;
 
-    messageInputBox.value = "";
-    messageInputBox.disabled = true;
+    this.messageInputBox.value = "";
+    this.messageInputBox.disabled = true;
   }
-  window.addEventListener("load", startup, false);
-  return {
-    toReturn: this.toReturn,
-    Recursive: self
-  };
+  window.addEventListener("load", this.startup, false);
 }
 
 window.RTCData = new MainFactory();
